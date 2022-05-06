@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+#IFS to ensure the file is not split by spaces. Only newlines
+IFS='
+'
+LINES=`cat pokemon.csv`
+for LINE in $LINES
+do
+	TYPE=`echo $LINE | cut -d "," -f 3` 
+	#if it's not the header...
+	if [ "$TYPE" != "Type 1" ];
+	then
+		#echo $TYPE
+		#create directories if they do not exist
+		if [ ! -d "$TYPE" ]
+		then
+			mkdir $TYPE
+		fi
+		#add lines to respective files
+		echo "$LINE" >> ${TYPE}.csv
+	fi
+done
+#put each file in respective folder
+#for each directory, put the matching csv file in the directory
+for DIR in *
+do
+	if [ -d "$DIR" ] 
+	then
+		mv ${DIR}.csv $DIR
+	fi
+done
+
